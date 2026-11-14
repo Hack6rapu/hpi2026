@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2b1237">
+  <title>Happy Birthday Sonu ❤️</title>
+  <style>
+    :root {
+      --pink: #ff79a9;
+      --rose: #ffb0c8;
+      --cream: #fff3f6;
+      --deep: #24102f;
+      --purple: #56305f;
+      --gold: #ffd78a;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+    body {
+      margin: 0; min-width: 320px; width: 100%; overflow-x: hidden;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,121,169,.22), transparent 28rem),
+        radial-gradient(circle at 85% 55%, rgba(164,111,206,.22), transparent 30rem),
+        linear-gradient(145deg, #1b1029, #3c1c48 55%, #21122f);
+    }
+    button { font: inherit; cursor: pointer; touch-action: manipulation; }
+    img, canvas { max-width: 100%; }
+    .page-section {
+      width: 100%; max-width: 1100px; min-height: 75vh; margin: 0 auto;
+      padding: clamp(48px, 8vw, 90px) clamp(18px, 5vw, 60px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    h1 { font-size: clamp(2.4rem, 7vw, 5.3rem); line-height: 1.08; margin: 12px 0 18px; }
+    h2 { font-size: clamp(1.8rem, 4.5vw, 3.2rem); margin: 0 0 18px; }
+    p { font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.85; max-width: 720px; margin: 10px auto; }
+    .eyebrow { color: var(--gold); letter-spacing: .18em; text-transform: uppercase; font: 600 .78rem Arial, sans-serif; }
+    .script { color: var(--rose); font-style: italic; }
+    .glow { text-shadow: 0 0 22px rgba(255,121,169,.55); }
+    .primary-btn, .secondary-btn {
+      border: 0; border-radius: 999px; padding: 14px 25px; min-height: 48px;
+      color: #39162f; background: linear-gradient(135deg, #ffe0a8, #ff9fc0);
+      box-shadow: 0 8px 28px rgba(0,0,0,.22); font-weight: 700;
+      transition: transform .2s ease, filter .2s ease;
+    }
+    .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .secondary-btn { background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.3); }
+    #gate {
+      position: fixed; inset: 0; z-index: 20; min-height: 100vh; min-height: 100svh;
+      display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255,121,169,.28), transparent 22rem),
+        linear-gradient(145deg, #1b1029, #4a2352);
+      transition: opacity .9s ease, visibility .9s ease;
+    }
+    #gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .gate-inner { width: min(100%, 680px); }
+    .gate-heart { font-size: clamp(3rem, 10vw, 6rem); animation: heartbeat 1.5s infinite; }
+    .hero { min-height: 100vh; min-height: 100svh; }
+    .hero-art { font-size: clamp(3.5rem, 10vw, 7rem); margin: 12px 0; filter: drop-shadow(0 8px 24px rgba(255,120,170,.3)); }
+    .divider { width: min(180px, 45%); height: 1px; margin: 25px auto; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .card {
+      width: min(100%, 760px); padding: clamp(22px, 5vw, 42px);
+      border: 1px solid rgba(255,255,255,.17); border-radius: 28px;
+      background: rgba(255,255,255,.075); box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      backdrop-filter: blur(8px);
+    }
+    .scratch-container {
+      width: 100%; max-width: 650px; margin: 30px auto;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 2vw, 20px);
+    }
+    .scratch-card { position: relative; min-width: 0; aspect-ratio: 1; }
+    .scratch-under {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; gap: 4px;
+      color: #5b2145; font-family: Arial, sans-serif; font-weight: 800;
+      background: linear-gradient(145deg, #ffe5ad, #ff9fc1);
+      clip-path: polygon(50% 91%, 12% 54%, 5% 40%, 6% 25%, 16% 13%, 31% 11%, 50% 27%, 69% 11%, 84% 13%, 94% 25%, 95% 40%, 88% 54%);
+      border-radius: 14px;
+    }
+    .scratch-under strong { font-size: clamp(1.25rem, 4vw, 2.2rem); }
+    .scratch-under span { font-size: clamp(.65rem, 1.8vw, .85rem); letter-spacing: .1em; }
+    .scratch-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      clip-path: polygon(50% 91%, 12% 54%, 5% 40%, 6% 25%, 16% 13%, 31% 11%, 50% 27%, 69% 11%, 84% 13%, 94% 25%, 95% 40%, 88% 54%);
+      touch-action: none; cursor: crosshair;
+    }
+    .scratch-hint { color: #ffd5e2; font-size: .9rem; }
+    #date-reveal { display: none; margin-top: 22px; animation: fadeUp .8s ease both; }
+    #date-reveal.show { display: block; }
+    .date-big { color: var(--gold); font-size: clamp(2rem, 6vw, 3.7rem); font-weight: bold; }
+    .cake { font-size: clamp(5rem, 15vw, 9rem); line-height: 1.2; margin: 10px 0; filter: drop-shadow(0 8px 18px rgba(255,174,104,.22)); }
+    .candle-note { color: var(--gold); font-style: italic; }
+    .bouquet { font-size: clamp(3.5rem, 10vw, 6rem); line-height: 1.3; margin: 12px 0; }
+    .love-note { font-size: clamp(1.2rem, 3vw, 1.7rem); color: #ffe0eb; font-style: italic; }
+    .music-control {
+      position: fixed; right: 16px; bottom: 16px; z-index: 10;
+      border: 1px solid rgba(255,255,255,.25); border-radius: 999px;
+      background: rgba(36,16,47,.82); color: white; padding: 11px 16px;
+      backdrop-filter: blur(8px); font: 14px Arial, sans-serif;
+    }
+    .petal {
+      position: fixed; top: -30px; z-index: 2; pointer-events: none;
+      animation: fall linear forwards; opacity: .8;
+    }
+    .floating-heart {
+      position: fixed; z-index: 1; bottom: -30px; pointer-events: none;
+      animation: floatUp linear forwards; opacity: .55;
+    }
+    .footer { color: #dcb9d2; font-size: .85rem; padding: 30px 16px 90px; text-align: center; }
+    @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fall { to { transform: translate3d(40px, 110vh, 0) rotate(480deg); opacity: 0; } }
+    @keyframes floatUp { to { transform: translateY(-110vh) rotate(25deg); opacity: 0; } }
+
+    @media (min-width: 600px) and (max-width: 1024px) {
+      .page-section { padding-left: 40px; padding-right: 40px; }
+      .scratch-container { max-width: 600px; gap: 18px; }
+    }
+    @media (max-width: 599px) {
+      .page-section { min-height: auto; padding-top: 62px; padding-bottom: 62px; }
+      .hero { min-height: 90vh; min-height: 90svh; }
+      .scratch-container { gap: 7px; }
+      .scratch-under span { letter-spacing: .04em; }
+      .music-control { right: 10px; bottom: 10px; padding: 10px 13px; }
+      .card { border-radius: 20px; }
+    }
+    @media (max-width: 360px) {
+      .scratch-container { gap: 4px; }
+      .scratch-under strong { font-size: 1.15rem; }
+      .scratch-under span { font-size: .58rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="gate">
+    <div class="gate-inner">
+      <div class="gate-heart">💗</div>
+      <div class="eyebrow">ভালোবাসায় গড়া ছোট্ট এক চমক</div>
+      <h1 class="glow">Happy Birthday<br><span class="script">Sonu!</span> ❤️</h1>
+      <p>খুব বিশেষ একজন মানুষ এই দিনটার জন্য আমি তাকে পেয়েছি তাই আমি যেন সব সময় তার পাশে থেকে এই ভাবে তাকে ভালোবেসে যেতে পারি । ♥️♥️
+</p>
+      <button class="primary-btn" id="open-surprise">তোমায় জন্য কিছু অন্য রকম করার চেষ্টা ✨</button>
+    </div>
+  </div>
+
+  <button class="music-control" id="music-toggle" aria-label="Toggle background music">♫ Play music</button>
+
+  <main>
+    <section class="page-section hero" id="home">
+      <div class="eyebrow">আজকের দিনটি পুরোপুরি তোমার জন্য</div>
+      <div class="hero-art">🎂 🌹 ✨</div>
+      <h1 class="glow">Happy Birthday,<br><span class="script">My Dear Sonu</span> ❤️</h1>
+      <p></p>
+      <div class="divider"></div>
+      <p class="script">একটি দিন, হাজারো স্মৃতি, আর তোমাকে উদ্‌যাপন করার মতো এক আজীবন ভালোবাসা।</p>
+      <button class="secondary-btn" onclick="document.getElementById('message').scrollIntoView({behavior:'smooth'})">তোমার জন্য কিছু লাইন ↓</button>
+    </section>
+
+    <section class="page-section" id="message">
+      <div class="card">
+        <div class="eyebrow">আমার হৃদয় থেকে তোমার হৃদয়ে</div>
+        <h2 class="script">To the girl who makes my life sweeter 💕</h2>
+        <p>আজ সেই স্পেশাল দিনটা যেটার জন্য আমি আমার সোনুটাকে আমার করে পেয়েছি। আমি আমার সোনুকে অনেক অনেক ভালোবাসি আর সারাজীবন এই ভাবে ভালবাসতে চাই ।</p>
+        <p>আমি আমার সোনুটাকে অনেক সময় ভুল বুঝি মাথা গরম করে ফেলি তবুও সোনুটা আমার পাশে সব সময় থাকে।  আমি মাথা গরম করলে সে মাথা ঠাণ্ডা রেখে নিজের কাছে টেনে নিয়ে সব কিছু ভুলে গিয়ে আমরা এক হয়ে মিশে যায়।</p>
+        <p>ভগবানের কাছে একটাই ইচ্ছে আমরা যেনো এই ভাবেই খুনসুটি করতে করতে সারাজীবন একসাথে সুখ দুঃখো মিলিয়ে কাটিয়ে দিতে পারি । </p>
+        <p>শুভ জন্মদিন আমার সোনু বৌটা অনেক অনেক আদর করতে ইচ্ছে করছে পরের জন্মদিন থেকে আমরা একসাথে পালন করব আমার সোনু যেনো এই ভাবেই আমার পাশে থেকো আর আমাকে সামলে নিও ।।</p>
+        <p>অনেক অনেক মিস ইউ সোনু আবারো একবার শুভ জন্মদিন সোনু ♥️♥️😘😘।।</p>
+        <div class="divider"></div>
+        <p class="love-note">"আজ যদি আমার একটি ইচ্ছা পূরণের সুযোগ থাকত, তবে সেটি হতো তোমাকে প্রতিদিন সুখী দেখা।"</p>
+      </div>
+    </section>
+
+    <section class="page-section" id="scratch">
+      <div class="eyebrow">Birthday Game</div>
+      <h2 class="glow">Scratch to reveal your special date 💌</h2>
+      <p>Gently scratch each heart to uncover the surprise.</p>
+      <div class="scratch-container">
+        <div class="scratch-card">
+          <div class="scratch-under"><span>DAY</span><strong>17</strong></div>
+          <canvas class="scratch-canvas" aria-label="Scratch to reveal the day"></canvas>
+        </div>
+        <div class="scratch-card">
+          <div class="scratch-under"><span>MONTH</span><strong>NOV</strong></div>
+          <canvas class="scratch-canvas" aria-label="Scratch to reveal the month"></canvas>
+        </div>
+        <div class="scratch-card">
+          <div class="scratch-under"><span>YEAR</span><strong>2026</strong></div>
+          <canvas class="scratch-canvas" aria-label="Scratch to reveal the year"></canvas>
+        </div>
+      </div>
+      <div class="scratch-hint">☝️ Use your finger on mobile or mouse on desktop</div>
+      <div id="date-reveal">
+        <div class="date-big">17 November 2004</div>
+        <p class="script">সবচেয়ে বিশেষ তারিখ, কারণ এটি সেই দিন যেদিন তোমার জন্ম হয়েছিল। ❤️</p>
+      </div>
+    </section>
+
+    <section class="page-section" id="cake">
+      <div class="eyebrow">birthday wish</div>
+      <h2 class="glow">Cake made sweeter with love 🎂</h2>
+      <div class="cake" aria-label="Birthday cake">🎂</div>
+      <p class="candle-note">Close your eyes, make a wish and blow out the candles!</p>
+      <p>তুমি যে মোমবাতিগুলো নেভাও, তার প্রতিটি যেন তোমার মুখে নতুন হাসির কারণ হয়ে আসে। এই বছরটি যেন সুন্দর সব সূচনায় আর স্বপ্ন পূরণের আনন্দে পরিপূর্ণ থাকে ।</p>
+      <button class="primary-btn" id="wish-button">My wish is for you ✨</button>
+      <p id="wish-message" class="script" hidden>May all your wishes come true, Sonu. You deserve the whole universe. 💖</p>
+    </section>
+
+    <section class="page-section" id="flowers">
+      <div class="card">
+        <div class="bouquet">💐 🌹 🌷</div>
+        <h2 class="script">A bouquet for my favourite person</h2>
+        <p>তোমার জন্য পাঠাচ্ছি হাজারটা গোলাপ, দশ লক্ষ আলিঙ্গন, আর এই ছোট্ট পাতায় যতটুকু ভালোবাসা ধরে, তার পুরোটাই। আমি যদি এখন তোমার পাশে থাকতাম, তবে তোমাকে জড়িয়ে ধরতাম সবচেয়ে বড় আলিঙ্গনে আর মনে করিয়ে দিতাম—তুমি আমার কাছে কতটা মূল্যবান।</p>
+        <div class="divider"></div>
+        <p class="love-note">তুমি আমার সবচেয়ে প্রিয়  ‘হ্যালো’ আর সবচেয়ে কঠিন ‘বিদায়’।❤️</p>
+      </div>
+    </section>
+
+    <section class="page-section" id="final">
+      <div class="hero-art">❤️ 🧸 ❤️</div>
+      <div class="eyebrow">Always and forever</div>
+      <h1 class="glow">Keep smiling,<br><span class="script">My Birthday Girl!</span></h1>
+      <p>Happy Birthday once again, Sonu.</p>
+      <p class="love-note">আমার সমস্ত ভালোবাসা তোমার জন্য আজ এবং প্রতিদিন | 💗</p>
+      <button class="secondary-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">শুরুতে ফিরে যাওয়া ↑</button>
+    </section>
+  </main>
+
+  <div class="footer">Love you Sonu ❤️</div>
+
+  <script>
+    // Opening screen and smooth scroll
+    document.getElementById('open-surprise').addEventListener('click', () => {
+      document.getElementById('gate').classList.add('hide');
+      setTimeout(() => document.getElementById('home').scrollIntoView({ behavior: 'smooth' }), 250);
+    });
+
+    // Scratch cards: each card has its own canvas and reveal state.
+    const canvases = [...document.querySelectorAll('.scratch-canvas')];
+    let revealedCount = 0;
+
+    canvases.forEach((canvas) => {
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      let isDrawing = false;
+      let revealed = false;
+
+      function setupCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        // Fill the complete canvas so the scratch-progress calculation is reliable.
+        const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+        gradient.addColorStop(0, '#f5c5d5');
+        gradient.addColorStop(.5, '#b9a5c9');
+        gradient.addColorStop(1, '#f3d9ae');
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, rect.width, rect.height);
+        ctx.fillStyle = 'rgba(255,255,255,.35)';
+        ctx.font = `600 ${Math.max(10, rect.width * .105)}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH', rect.width / 2, rect.height / 2 + 5);
+        ctx.globalCompositeOperation = 'destination-out';
+      }
+
+      function getPoint(event) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      }
+      function scratch(event) {
+        if (!isDrawing || revealed) return;
+        const point = getPoint(event);
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, Math.max(13, canvas.clientWidth * .075), 0, Math.PI * 2);
+        ctx.fill();
+        checkProgress();
+      }
+      function checkProgress() {
+        if (revealed) return;
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let transparent = 0;
+        // Alpha is stored at every fourth byte.
+        for (let i = 3; i < pixels.length; i += 4) {
+          if (pixels[i] < 80) transparent++;
+        }
+        if (transparent / (pixels.length / 4) > .24) {
+          revealed = true;
+          canvas.style.transition = 'opacity .55s ease';
+          canvas.style.opacity = '0';
+          setTimeout(() => canvas.style.visibility = 'hidden', 600);
+          revealedCount++;
+          if (revealedCount === canvases.length) {
+            document.getElementById('date-reveal').classList.add('show');
+            document.getElementById('date-reveal').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }
+      canvas.addEventListener('pointerdown', (event) => {
+        if (revealed) return;
+        isDrawing = true;
+        canvas.setPointerCapture?.(event.pointerId);
+        scratch(event);
+      });
+      canvas.addEventListener('pointermove', scratch);
+      ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type =>
+        canvas.addEventListener(type, () => isDrawing = false)
+      );
+      setupCanvas();
+      // Rebuild scratch foil if the device rotates before the user starts scratching.
+      let initialWidth = canvas.clientWidth;
+      window.addEventListener('resize', () => {
+        if (!revealed && revealedCount === 0 && Math.abs(canvas.clientWidth - initialWidth) > 2) {
+          initialWidth = canvas.clientWidth;
+          setupCanvas();
+        }
+      });
+    });
+
+    // Birthday wish button
+    document.getElementById('wish-button').addEventListener('click', () => {
+      const message = document.getElementById('wish-message');
+      message.hidden = false;
+      message.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // Gentle decorative falling petals and floating hearts
+    const symbols = ['🌸', '🌹', '💗', '✨', '🌷'];
+    function createPetal() {
+      const el = document.createElement('span');
+      el.className = 'petal';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = (14 + Math.random() * 15) + 'px';
+      const duration = 8 + Math.random() * 8;
+      el.style.animationDuration = duration + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), duration * 1000);
+    }
+    setInterval(createPetal, 950);
+
+    // Optional original gentle melody using the Web Audio API.
+    // let audioContext = null, melodyTimer = null, noteIndex = 0;
+    // let musicPlaying = false;
+    // const notes = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 783.99, 698.46];
+    // function playNote() {
+    //   if (!audioContext || !musicPlaying) return;
+    //   const oscillator = audioContext.createOscillator();
+    //   const gain = audioContext.createGain();
+    //   oscillator.type = 'sine';
+    //   oscillator.frequency.value = notes[noteIndex % notes.length];
+    //   gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+    //   gain.gain.exponentialRampToValueAtTime(.045, audioContext.currentTime + .04);
+    //   gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + .42);
+    //   oscillator.connect(gain);
+    //   gain.connect(audioContext.destination);
+    //   oscillator.start();
+    //   oscillator.stop(audioContext.currentTime + .45);
+    //   noteIndex++;
+    // }
+    // document.getElementById('music-toggle').addEventListener('click', async (event) => {
+    //   const button = event.currentTarget;
+    //   if (!audioContext) {
+    //     const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    //     if (!AudioCtx) { button.textContent = 'Music unavailable'; return; }
+    //     audioContext = new AudioCtx();
+    //   }
+    //   if (audioContext.state === 'suspended') await audioContext.resume();
+    //   musicPlaying = !musicPlaying;
+    //   if (musicPlaying) {
+    //     button.textContent = '♫ Pause music';
+    //     playNote();
+    //     melodyTimer = setInterval(playNote, 520);
+    //   } else {
+    //     button.textContent = '♫ Play music';
+    //     clearInterval(melodyTimer);
+    //   }
+    // });
+    // Custom Birthday Background Music
+let musicPlaying = false;
+
+const birthdayAudio = new Audio("./bsong-slow.mp3");
+birthdayAudio.loop = true;
+birthdayAudio.volume = 0.45;
+
+document.getElementById('music-toggle').addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+
+    try {
+        if (!musicPlaying) {
+            await birthdayAudio.play();
+            musicPlaying = true;
+            button.textContent = '♫ Pause music';
+        } else {
+            birthdayAudio.pause();
+            musicPlaying = false;
+            button.textContent = '♫ Play music';
+        }
+    } catch (error) {
+        console.error("Audio playback failed:", error);
+        button.textContent = '♫ Try again';
+    }
+});
+
+// Reset button when audio finishes or encounters an error
+birthdayAudio.addEventListener('ended', () => {
+    musicPlaying = false;
+    button.textContent = '♫ Play music';
+});
+  </script>
+</body>
+</html>
